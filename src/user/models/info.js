@@ -1,14 +1,25 @@
 const db = require("../../config/db");
 
 module.exports = {
-  searchInfo: (title, id) => {
+  searchInfo: function (body, title, page, limit) {
     return new Promise((resolve, reject) => {
-      const sql = `SELECT * FROM info WHERE (title) LIKE '%${title}%' AND id <> ${id} ORDER BY title ASC`;
-      db.query(sql, (err, result) => {
+      if (!limit) {
+        limit = 4;
+      } else {
+        limit = parseInt(limit);
+      }
+
+      if (!page) {
+        page = 1;
+      } else {
+        page = parseInt(page);
+      }
+      const query = `SELECT * FROM info WHERE title LIKE '%${title}%' ORDER BY title ASC`;
+      db.query(query, body, (err, data) => {
         if (!err) {
-          resolve(result);
+          resolve(data);
         } else {
-          reject(new Error(err));
+          reject(err);
         }
       });
     });
