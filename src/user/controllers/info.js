@@ -1,6 +1,6 @@
 const informationModel = require("../models/info");
 
-const { response } = require("../helpers");
+const { response } = require("../../helpers");
 
 module.exports = {
   searchByName: async function (req, res) {
@@ -15,7 +15,15 @@ module.exports = {
   },
   getAll: async function (req, res) {
     try {
-      const result = await informationModel.getAll();
+      const result = await informationModel.getAll(req.query);
+      response(res, 200, result);
+    } catch (error) {
+      response(res, 500, { message: error.message });
+    }
+  },
+  getPagination: async (req, res) => {
+    try {
+      const result = await informationModel.getPagination(req.query);
       response(res, 200, result);
     } catch (error) {
       response(res, 500, { message: error.message });

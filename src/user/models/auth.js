@@ -1,10 +1,10 @@
-const db = require("../config/mysql");
+const db = require("../../config/db");
 
 module.exports = {
   checkUser: function (setData) {
     return new Promise((resolve, reject) => {
       db.query(
-        `SELECT * FROM users WHERE email='${setData.email}'`,
+        `SELECT * FROM user WHERE email='${setData.email}'`,
         (err, result) => {
           if (!err) {
             resolve(result);
@@ -17,7 +17,7 @@ module.exports = {
   },
   postRegister: function (setData) {
     return new Promise((resolve, reject) => {
-      db.query("INSERT INTO users SET ?", setData, (err, res) => {
+      db.query("INSERT INTO user SET ?", setData, (err, res) => {
         if (!err) {
           resolve(res);
         } else {

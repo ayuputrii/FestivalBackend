@@ -2,7 +2,7 @@ const authModels = require("../models/auth");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
-const { response } = require("../helpers/");
+const { response } = require("../../helpers");
 
 module.exports = {
   postLogin: async function (req, res) {
@@ -19,42 +19,13 @@ module.exports = {
         check = bcrypt.compareSync(setData.password, result[0].password);
       }
       if (check) {
-        let firstName;
-        let lastName;
-        if (result[0].name.split(" ").length > 1) {
-          const separateName = result[0].name.split(" ");
-          const [first, ...last] = separateName;
-          firstName = first;
-          lastName = last.join(" ");
-        } else {
-          firstName = result[0].name;
-          lastName = " ";
-        }
-
-        const {
-          id,
-          email,
-          name,
-          balance,
-          photo,
-          phone,
-          verified,
-          role,
-          pin,
-        } = result[0];
+        const { id, role, username, email } = result[0];
         const token = jwt.sign(
           {
             id,
-            name,
-            firstName,
-            lastName,
-            email,
-            balance,
-            photo,
-            phone,
-            verified,
             role,
-            pin,
+            username,
+            email,
           },
           process.env.SECRET_KEY
         );

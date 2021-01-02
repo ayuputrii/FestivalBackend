@@ -4,7 +4,7 @@ const {
   requiredName,
   requiredEmail,
   requiredPassword,
-} = require("../middlewares/validators");
+} = require("../../middleware/validators");
 
 router
   .post("/login", authController.postLogin)
@@ -14,3 +14,11 @@ router
     authController.postRegister
   );
 module.exports = router;
+
+// const router = require("express").Router();
+// const authController = require("../controllers/auth");
+
+// router
+//   .post("/register", authController.register)
+//   .post("/login", authController.login);
+// module.exports = router;

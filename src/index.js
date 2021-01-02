@@ -1,5 +1,6 @@
 const router = require("express").Router();
-const infoRoutes = require("./user/routes/informationRoutes");
+const authRoutes = require("./user/routes/auth");
+const infoRoutes = require("./user/routes/info");
 
-router.use("/info", infoRoutes);
+router.use("/auth", authRoutes).use("/info", infoRoutes);
 module.exports = router;
