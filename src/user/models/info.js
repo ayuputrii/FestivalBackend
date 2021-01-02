@@ -1,18 +1,16 @@
 const db = require("../../config/db");
 
 module.exports = {
-  searchByName: function (title) {
+  searchInfo: (title, id) => {
     return new Promise((resolve, reject) => {
-      db.query(
-        `SELECT title, description, photographer, category FROM info WHERE title LIKE '%${title}%' ORDER BY title ASC`,
-        (err, result) => {
-          if (!err) {
-            resolve(result);
-          } else {
-            reject(new Error(err));
-          }
+      const sql = `SELECT * FROM info WHERE (title) LIKE '%${title}%' AND id <> ${id} ORDER BY title ASC`;
+      db.query(sql, (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(new Error(err));
         }
-      );
+      });
     });
   },
   getAll: function () {

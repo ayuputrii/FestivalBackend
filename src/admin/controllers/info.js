@@ -42,37 +42,70 @@ module.exports = {
       });
   },
   updateInfo: (req, res, result) => {
-    req.body.photo = req.file ? req.file.filename : "";
-    const { id } = req.token;
+    const { id } = req.params;
     informationModel
-      .patchInfo(req.body, id)
+      .updateInfo(req.body, id)
       .then((data) => {
         if (result.length) {
           res.status(200).send({
-            message: "Success",
+            message: "Success Update Data",
+            data: data,
+          });
+        } else {
+          res.status(400).send({
+            success: false,
+            message: "Id Not Found",
             data: data,
           });
         }
       })
       .catch((err) => {
         res.send({
+          success: false,
           mesage: err.message,
         });
       });
   },
-  deleteInfo: (req, res) => {
-    const { id } = req.params;
+  changePhoto: (req, res) => {
+    const setData = req.body;
+    if (req.file) {
+      setData.photo = req.file.filename;
+      informationModel
+        .changePhoto(req.params, { photo: req.file.filename })
+        .then((data) => formResponse(data, res, 201))
+        .catch((err) =>
+          res.send({
+            status: 401,
+            message: err,
+          })
+        );
+    } else {
+      res.send({
+        status: 500,
+        message: [],
+      });
+    }
+  },
+  deleteInfo: (req, res, result) => {
     informationModel
-      .deleteInfo(req.body, id)
+      .deleteInfo(req.params.id)
       .then((data) => {
         if (result.length) {
           res.status(200).send({
-            message: "Success",
+            message: "Success Delete Data",
+            data: result,
+          });
+        } else {
+          res.status(400).send({
+            success: false,
+            message: "Id Not Found",
+            data: result,
           });
         }
       })
       .catch((err) => {
-        res.status(500).send({
+        res.send({
+          success: false,
           mesage: err.message,
         });
       });

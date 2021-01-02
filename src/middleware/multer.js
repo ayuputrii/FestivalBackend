@@ -11,18 +11,14 @@ const storage = multer.diskStorage({
   },
 });
 
-const limits = {
-  fileSize: 1024 * 1024 * 5,
+const fileFL = {
+  limits: { fileSize: 5 * 1000 * 10000 },
+  fileFilter(req, file, cb) {
+    if (file.originalname.match(/\.(jpg|jpeg|png)\b/)) {
+      cb(null, true);
+    } else {
+      cb("Image type must jpg, jpeg or png", null);
+    }
+  },
 };
-
-const fileFilter = (req, file, cb) => {
-  const mime = /jpg|webp|gif|png|jpeg|svg/;
-  const extName = mime.test(path.extname(file.originalname).toLowerCase());
-  if (extName) {
-    cb(null, true);
-  } else {
-    cb(null, false);
-  }
-};
-
-module.exports = multer({ storage, fileFilter, limits }).single("photo");
+module.exports = multer({ storage, fileFL }).single("photo");

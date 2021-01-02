@@ -3,6 +3,7 @@ const infoController = require("../controllers/info");
 const { authentication, authorization } = require("../../middleware/auth");
 const multipleUpload = require("../../middleware/upload");
 
+const upload = require("../../middleware/multer");
 router
   .post(
     "/created",
@@ -13,11 +14,22 @@ router
   )
   .get("/get", authentication, authorization, infoController.getAll)
   .patch(
-    "/update",
+    "/update/:id",
     authentication,
     authorization,
-    multipleUpload,
     infoController.updateInfo
   )
-  .delete("/delete", authentication, authorization, infoController.deleteInfo);
+  .patch(
+    "/change/:id",
+    authentication,
+    authorization,
+    upload,
+    infoController.changePhoto
+  )
+  .delete(
+    "/delete/:id",
+    authentication,
+    authorization,
+    infoController.deleteInfo
+  );
 module.exports = router;
